@@ -46,6 +46,7 @@ repositories {
 dependencies {
     implementation 'com.furhatrobotics.furhatos:furhat-commons:+'
     implementation 'io.github.sashirestela:simple-openai:3.8.2'
+    implementation 'com.furhatrobotics.assets:StandardLibraryCollection:1.2.0'
 }
 
 jar {

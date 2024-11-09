@@ -50,19 +50,19 @@ val personas = listOf(
         face = listOf("Titan"),
         voice = PollyNeuralVoice("Kimberly")
     ),
-    Persona(
-        name = "Emma",
-        desc = "personal trainer",
-        intro = "How do you think I could help you?",
-        face = listOf("Isabel"),
-        voice = PollyNeuralVoice("Olivia")
-    ),
-    Persona(
-        name = "Albert Einstein",
-        otherNames = listOf("Einstein", "Albert"),
-        desc = "famous scientist",
-        intro = "What can I help you with?",
-        face = listOf("James"),
-        voice = PollyNeuralVoice("Brian")
-    )
+//    Persona(
+//        name = "Emma",
+//        desc = "personal trainer",
+//        intro = "How do you think I could help you?",
+//        face = listOf("Isabel"),
+//        voice = PollyNeuralVoice("Olivia")
+//    ),
+//    Persona(
+//        name = "Albert Einstein",
+//        otherNames = listOf("Einstein", "Albert"),
+//        desc = "famous scientist",
+//        intro = "What can I help you with?",
+//        face = listOf("James"),
+//        voice = PollyNeuralVoice("Brian")
+//    )
 )
