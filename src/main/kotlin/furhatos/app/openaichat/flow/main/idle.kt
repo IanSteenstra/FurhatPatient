@@ -1,22 +1,20 @@
-package furhatos.app.openaichat.flow
+package furhatos.app.openaichat.flow.main
 
+import furhatos.app.openaichat.flow.chatbot.MainChat
 import furhatos.app.openaichat.setting.activate
-import furhatos.app.openaichat.setting.hostPersona
-import furhatos.nlu.common.*
+import furhatos.app.openaichat.setting.currentPersona
 import furhatos.flow.kotlin.*
-import furhatos.records.Location
 
 val Idle : State = state {
     onEntry {
-        activate(hostPersona)
+        activate(currentPersona)
         furhat.attendNobody()
     }
 
     onUserEnter {
         furhat.attend(it)
-        goto(ChoosePersona())
+        goto(MainChat)
     }
-
 }
 
 

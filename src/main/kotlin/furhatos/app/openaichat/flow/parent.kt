@@ -1,5 +1,6 @@
 package furhatos.app.openaichat.flow
 
+import furhatos.app.openaichat.flow.main.Idle
 import furhatos.event.actions.ActionLipSync
 import furhatos.flow.kotlin.*
 
