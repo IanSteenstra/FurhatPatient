@@ -39,24 +39,22 @@ val MainChat = state(Parent) {
             val strength = 5.0
             val duration = 2.0
 
-            val gesture = when (val gestureName = response.gesture) {
-                "BigSmile" -> Gestures.BigSmile(strength = strength, duration = duration)
+            val gesture = when (val gestureName = response.next_patient_facial_expression) {
+                "ExpressAnger" -> furhat.gesture(MyExpressAnger)
                 "Blink" -> Gestures.Blink(strength = strength, duration = duration)
-                "BrowFrown" -> Gestures.BrowFrown(strength = strength, duration = duration)
-                "BrowRaise" -> Gestures.BrowRaise(strength = strength, duration = duration)
                 "CloseEyes" -> Gestures.CloseEyes(strength = strength, duration = duration)
-                "ExpressAnger" -> Gestures.ExpressAnger(strength = strength, duration = duration)
-                "ExpressDisgust" -> Gestures.ExpressDisgust(strength = strength, duration = duration)
-                "ExpressFear" -> Gestures.ExpressFear(strength = strength, duration = duration)
-                "ExpressSad" -> Gestures.ExpressSad(strength = strength, duration = duration)
+                "ExpressDisgust" -> furhat.gesture(MyExpressDisgust)
+                "ExpressDisapproval" -> furhat.gesture(MyExpressDisapproval)
+                "ExpressFear" -> furhat.gesture(MyExpressFear)
+                "ExpressSad" -> furhat.gesture(MyExpressSad)
+                "ExpressHappy" -> furhat.gesture(MyExpressHappy)
+                "ExpressRelief" -> furhat.gesture(MyExpressRelief)
                 "GazeAway" -> Gestures.GazeAway(strength = strength, duration = duration)
                 "Nod" -> Gestures.Nod(strength = strength, duration = duration)
-                "Oh" -> Gestures.Oh(strength = strength, duration = duration)
                 "OpenEyes" -> Gestures.OpenEyes(strength = strength, duration = duration)
-                "Roll" -> Gestures.Roll(strength = strength, duration = duration)
-                "Shake" -> Gestures.Shake(strength = strength, duration = duration)
-                "Smile" -> Gestures.Smile(strength = strength, duration = duration)
-                "Surprise" -> Gestures.Surprise(strength = strength, duration = duration)
+                "ShakeHead" -> Gestures.Shake(strength = strength, duration = duration)
+                "SmallSmile" -> Gestures.Smile(strength = strength, duration = duration)
+                "ExpressSurprise" -> furhat.gesture(MyExpressSurprise)
                 "Thoughtful" -> Gestures.Thoughtful(strength = strength, duration = duration)
                 "Wink" -> Gestures.Wink(strength = strength, duration = duration)
                 else -> {
@@ -65,16 +63,24 @@ val MainChat = state(Parent) {
                 }
             }
 
+            //TODO
             gesture?.let { furhat.gesture(it) }
+            //furhat.gesture(response.nonverbal_behavior)
             furhat.say(response.next_patient_utterance)
-        } else { // Idle/Control
+        } else if (conditionType == "control") { // Idle/Control
             val response = call {
                 currentPersona.chatbot.getResponse()
             } as String
 
             furhat.say(response)
         }
+        else { // Idle/ test
+            val response = call {
+                currentPersona.chatbot.getResponse()
+            } as String
 
+            furhat.say(response)
+        }
         reentry()
     }
 
