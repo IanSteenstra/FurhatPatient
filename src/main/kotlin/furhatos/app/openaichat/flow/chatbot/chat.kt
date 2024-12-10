@@ -3,10 +3,28 @@ package furhatos.app.openaichat.flow.chatbot
 import furhatos.app.openaichat.flow.*
 import furhatos.app.openaichat.flow.main.Idle
 import furhatos.app.openaichat.setting.activate
-import furhatos.app.openaichat.setting.conditionType
+//import furhatos.app.openaichat.setting.conditionType
 import furhatos.app.openaichat.setting.currentPersona
 import furhatos.flow.kotlin.*
 import furhatos.gestures.Gestures
+
+// initialize Beliefs, Desires, Intentions - will get updated after each turn
+var Current_BDI = "   {\n" +
+        "            \"Beliefs\": {\n" +
+        "                \"Belief1\": \"I don't have any issues with my habits.\",\n" +
+        "                \"Belief2\": \"I don't need anyone in the world to approve of my actions.\"\n" +
+        "            },\n" +
+        "            \"Desires\": {\n" +
+        "                \"Desire1\": \"I wish I didn't have to come here. Just wanna get out.\"\n" +
+        "            },\n" +
+        "            \"Intentions\": {\n" +
+        "                \"Intention1\": \"My health is not in bad shape. I'm still young.\"\n" +
+        "            }\n" +
+        "        }"
+
+
+val conditionType = currentPersona.conditionType
+val systemPrompt = currentPersona.systemPrompt
 
 val MainChat = state(Parent) {
     onEntry {
@@ -32,7 +50,7 @@ val MainChat = state(Parent) {
 
         if (conditionType == "intervention") {
             val response = call {
-                currentPersona.chatbot.getResponse()
+                currentPersona.chatbot.getResponse(systemPrompt + "$Current_BDI***")
             } as AppraisalSchema
 
             // Play around with these, but I found these to be the best so far
@@ -63,22 +81,22 @@ val MainChat = state(Parent) {
                 }
             }
 
+            Current_BDI = response.updated_bdi.toString() //TODO from Farnaz: check if this serialization works
+
             //TODO
             gesture?.let { furhat.gesture(it) }
             //furhat.gesture(response.nonverbal_behavior)
             furhat.say(response.next_patient_utterance)
         } else if (conditionType == "control") { // Idle/Control
             val response = call {
-                currentPersona.chatbot.getResponse()
+                currentPersona.chatbot.getResponse(systemPrompt)
             } as String
 
             furhat.say(response)
         }
-        else { // Idle/ test
-            val response = call {
-                currentPersona.chatbot.getResponse()
-            } as String
-
+        // if not control or intervention, nothing will be said --> good for gesture testing purposes
+        else { // Idle/Control
+            val response: String = ""
             furhat.say(response)
         }
         reentry()

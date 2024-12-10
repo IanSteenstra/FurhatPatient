@@ -236,13 +236,13 @@ val jsonSchema: ResponseFormat = ResponseFormat.jsonSchema(
         }
 )
 
-class OpenAIChatbot(val systemPrompt: String) {
+class OpenAIChatbot() {
 
     // TODO: Modify for idle or intervention option
-    fun getResponse(): Any? {
+    fun getResponse(Prompt: String): Any? {
         val chatRequestBuilder = ChatRequest.builder()
             .model("gpt-4o-mini")
-            .message(ChatMessage.SystemMessage.of(systemPrompt))
+            .message(ChatMessage.SystemMessage.of(Prompt))
 
         if (conditionType == "intervention") {
             chatRequestBuilder.responseFormat(jsonSchema)

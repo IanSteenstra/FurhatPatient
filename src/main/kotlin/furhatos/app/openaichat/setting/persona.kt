@@ -6,7 +6,9 @@ import furhatos.flow.kotlin.furhat
 import furhatos.flow.kotlin.voice.PollyNeuralVoice
 import furhatos.flow.kotlin.voice.Voice
 
-val persona_1 = Persona( // TODO: Chang the persona here
+val conditionType: String = "intervention" // TODO: Set the condition here {choose from control; intervention; test (for gesture testing purposes)}
+
+val persona_1 = Persona( // TODO: Change the persona here
     name = "Alex",
     gender = "Male",
     occupation = "PhD Student",
@@ -17,11 +19,11 @@ val persona_1 = Persona( // TODO: Chang the persona here
     awareness_level = "1",
     reward_level = "6",
     face = listOf("Alex", "default"),
-    voice = PollyNeuralVoice("Kimberly")
+    voice = PollyNeuralVoice("Kimberly"),
+    conditionType = conditionType
 )
 
 val currentPersona: Persona = persona_1 // TODO: Set the persona here
-val conditionType: String = "intervention" // TODO: Set the condition here
 
 class Persona(
     val name: String,
@@ -37,6 +39,7 @@ class Persona(
     val face: List<String>,
     val mask: String = "adult",
     val voice: Voice,
+    val conditionType: String,
     val gestureList: List<String> = listOf(
         "BigSmile",
         "Blink",
@@ -57,11 +60,10 @@ class Persona(
         "Thoughtful",
         "Wink"
     ),
+
     val controlPrompt: String = "You are a simulator acting within a conversation. Two people are having a conversation, one is a behavior change counselor and the other is an alcohol misuse patient. After each turn of counselor utterance, given a particular scenario and persona that you infer from the conversation history, your job is to generate the next utterance that is most likely to be said by the patient. Patient Persona: name:$name; gender:$gender; occupation:$occupation; ethnicity:$ethnicity; age:$age; personality:$personality\n",
 
-    val testPrompt: String = "",
-
-    val interventionPrompt: String = "You are an emotion simulator acting within a conversation. Two people are having a conversation, one is a behavior change counselor and the other is an alcohol misuse patient. After each turn of counselor utterance, your job is to guess the most likely emotions the patient is feeling, given a particular scenario that you infer from the conversation history, the last counselor utterance, and some 'appraisal' variables that can be derived from that scenario or situation. Appraisal variables are defined as criteria along which the significance of events can be judged, as they relate to one's beliefs, intentions and desires. These judgments are entirely subjective to the person interpreting them and are based on their relationship with their environment (so it may be very different from other people's perspective). Remember that the events/situations in focus also include what the counselor is saying and the current relationship dynamics between the counselor and the patient. The event/situation in question can also include things that happened in the past, are happening in the present, or are thought to happen in the future.\n" +
+    val interventionPrompt: String = "TASK DESCRIPTION:***You are an emotion simulator acting within a conversation. Two people are having a conversation, one is a behavior change counselor and the other is an alcohol misuse patient. After each turn of counselor utterance, your job is to guess the most likely emotions the patient is feeling, given a particular scenario that you infer from the conversation history, the last counselor utterance, and some 'appraisal' variables that can be derived from that scenario or situation. Appraisal variables are defined as criteria along which the significance of events can be judged, as they relate to one's beliefs, intentions and desires. These judgments are entirely subjective to the person interpreting them and are based on their relationship with their environment (so it may be very different from other people's perspective). Remember that the events/situations in focus also include what the counselor is saying and the current relationship dynamics between the counselor and the patient. The event/situation in question can also include things that happened in the past, are happening in the present, or are thought to happen in the future.\n" +
             " \n" +
             "As input, you will get the conversation history and a set of beliefs, desires and intentions that the patient has prior to hearing the last counselor utterance. To do your task, try to clearly imagine the situation given that history, then take the following steps in the order specified, while keeping in mind the patient's beliefs, desires and intentions. Your final output should be saved as JSON, and be an aggregate of some dictionaries, and should begin each scoring decision by reasoning about the corresponding appraisal. Use the format in json schema to construct the final output.\n" +
             "\n" +
@@ -150,14 +152,25 @@ class Persona(
             "        \"Thoughtful\",\n" +
             "        \"Wink\"\n" +
             "]\n" +
-            ">>>\n"
+            ">>>\n***" +
+            "PATIENT'S CURRENT BELIEFS, DESIRES AND INTENTIONS:\n***\n"
 
 
 ) {
-    /** The prompt for the openAI language model **/
-    private var systemPrompt: String = interventionPrompt // TODO: Set the condition prompt here
+    val systemPrompt: String
 
-    val chatbot = OpenAIChatbot(systemPrompt = systemPrompt)
+    init {
+        systemPrompt = if (conditionType == "intervention") {
+            interventionPrompt
+        } else if (conditionType == "control") {
+            controlPrompt
+        }
+        else{
+            ""// default (or test)
+        }
+
+    }
+    val chatbot = OpenAIChatbot()
 }
 
 fun FlowControlRunner.activate(persona: Persona) {
