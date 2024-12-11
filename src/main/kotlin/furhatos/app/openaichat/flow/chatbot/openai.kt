@@ -247,6 +247,7 @@ class OpenAIChatbot() {
         if (conditionType == "intervention") {
             chatRequestBuilder.responseFormat(jsonSchema)
         }
+
         Furhat.dialogHistory.all.takeLast(10).forEach {
             when (it) {
                 is DialogHistory.ResponseItem -> {
@@ -254,7 +255,7 @@ class OpenAIChatbot() {
                 }
 
                 is DialogHistory.UtteranceItem -> {
-                    chatRequestBuilder.message(ChatMessage.AssistantMessage.of(it.toText()))
+                    chatRequestBuilder.message(ChatMessage.AssistantMessage.of(it.toUtterance().parts[0].toString()))
                 }
             }
         }
