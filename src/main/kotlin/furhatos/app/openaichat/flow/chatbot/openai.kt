@@ -235,7 +235,7 @@ class OpenAIChatbot(val systemPrompt: String) {
     // TODO: Modify for idle or intervention option
     fun getResponse(): Any? {
         val chatRequestBuilder = ChatRequest.builder()
-            .model("gpt-4o-mini")
+            .model("gpt-4o")
             .message(ChatMessage.SystemMessage.of(systemPrompt))
 
         if (conditionType == "intervention") {
@@ -248,7 +248,8 @@ class OpenAIChatbot(val systemPrompt: String) {
                 }
 
                 is DialogHistory.UtteranceItem -> {
-                    chatRequestBuilder.message(ChatMessage.AssistantMessage.of(it.toText()))
+                    println(it.parts[0].toString())
+                    chatRequestBuilder.message(ChatMessage.AssistantMessage.of(it.parts[0].toString()))
                 }
             }
         }

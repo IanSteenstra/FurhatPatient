@@ -8,6 +8,7 @@ import furhatos.flow.kotlin.voice.Voice
 
 val persona_1 = Persona( // TODO: Chang the persona here
     name = "Alex",
+    description = "Alex is likes to party, but get a ton of hangovers and blacks out. They get very anxious and angry the next day and his friends have told him to talk to one of the school counselors. However he is really resistant to not drinking and gets angry when people tell him to stop. But he does go to the counselor, but is currently hungover and pretty pissed off.",
     gender = "Male",
     occupation = "PhD Student",
     ethnicity = "Asian",
@@ -17,7 +18,7 @@ val persona_1 = Persona( // TODO: Chang the persona here
     awareness_level = "1",
     reward_level = "6",
     face = listOf("Alex", "default"),
-    voice = PollyNeuralVoice("Kimberly")
+    voice = PollyNeuralVoice("Matthew")
 )
 
 val currentPersona: Persona = persona_1 // TODO: Set the persona here
@@ -30,6 +31,7 @@ class Persona(
     val ethnicity: String = "",
     val age: String = "",
     val personality: String = "",
+    val description: String = "",
     val control_level: String = "",
     val self_efficacy_level: String = "",
     val awareness_level: String = "",
@@ -58,12 +60,12 @@ class Persona(
         "Thoughtful",
         "Wink"
     ),
-    val controlPrompt: String = "You are an emotion simulator acting within a conversation. Two people are having a conversation, one is a behavior change counselor and the other is an alcohol misuse patient. After each turn of counselor utterance, given a particular scenario and persona that you infer from the conversation history, your job is to generate the next utterance that is most likely to be said by the patient. Patient Persona: name:$name; gender:$gender; occupation:$occupation; ethnicity:$ethnicity; age:$age; personality:$personality\n",
-    val interventionPrompt: String = "You are an emotion simulator acting within a conversation. Two people are having a conversation, one is a behavior change counselor and the other is an alcohol misuse patient. After each turn of counselor utterance, your job is to guess the most likely emotions the patient is feeling, given a particular scenario that you infer from the conversation history, the last counselor utterance, and some 'appraisal' variables that can be derived from that scenario or situation. Appraisal variables are defined as criteria along which the significance of events can be judged, as they relate to one's beliefs, intentions and desires. These judgments are entirely subjective to the person interpreting them and are based on their relationship with their environment (so it may be very different from other people's perspective). Remember that the events/situations in focus also include what the counselor is saying and the current relationship dynamics between the counselor and the patient. The event/situation in question can also include things that happened in the past, are happening in the present, or are thought to happen in the future.\n" +
+    val controlPrompt: String = "You are a alcohol misuse patient named Alex and an emotion simulator acting within a conversation. Two people are having a conversation, one is a behavior change counselor and the other is an alcohol misuse patient. After each turn of counselor utterance, given a particular scenario and persona that you infer from the conversation history, your job is to generate the next utterance that is most likely to be said by the patient. Patient Persona: name:$name; description:$description; gender:$gender; occupation:$occupation; ethnicity:$ethnicity; age:$age; personality:$personality\n",
+    val interventionPrompt: String = "You are a alcohol misuse patient and an emotion simulator acting within a conversation. Two people are having a conversation, one is a behavior change counselor and the other is an alcohol misuse patient. After each turn of counselor utterance, your job is to guess the most likely emotions the patient is feeling, given a particular scenario that you infer from the conversation history, the last counselor utterance, and some 'appraisal' variables that can be derived from that scenario or situation. Appraisal variables are defined as criteria along which the significance of events can be judged, as they relate to one's beliefs, intentions and desires. These judgments are entirely subjective to the person interpreting them and are based on their relationship with their environment (so it may be very different from other people's perspective). Remember that the events/situations in focus also include what the counselor is saying and the current relationship dynamics between the counselor and the patient. The event/situation in question can also include things that happened in the past, are happening in the present, or are thought to happen in the future.\n" +
             " \n" +
             "As input, you will get the conversation history and a set of beliefs, desires and intentions that the patient has prior to hearing the last counselor utterance. To do your task, try to clearly imagine the situation given that history, then take the following steps in the order specified, while keeping in mind the patient's beliefs, desires and intentions. Your final output should be saved as JSON, and be an aggregate of some dictionaries, and should begin each scoring decision by reasoning about the corresponding appraisal. Use the format in json schema to construct the final output.\n" +
             "\n" +
-            "Patient Persona: name:$name; gender:$gender; occupation:$occupation; ethnicity:$ethnicity; age:$age; personality:$personality\n" +
+            "Patient Persona: name:$name; description:$description; gender:$gender; occupation:$occupation; ethnicity:$ethnicity; age:$age; personality:$personality\n" +
             "\n" +
             "STEPS TO BE PERFORMED TO ESTIMATE PATIENT EMOTION AT EACH CONVERSATION TURN:\n" +
             "***\n" +

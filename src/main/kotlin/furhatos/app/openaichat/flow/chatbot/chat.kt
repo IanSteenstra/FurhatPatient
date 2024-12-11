@@ -18,7 +18,7 @@ val MainChat = state(Parent) {
     }
 
     onReentry {
-        furhat.listen()
+        furhat.listen(timeout=1000)
     }
 
     onResponse("can we stop", "goodbye") {
@@ -38,6 +38,8 @@ val MainChat = state(Parent) {
             // Play around with these, but I found these to be the best so far
             val strength = 5.0
             val duration = 2.0
+
+            print(response.gesture)
 
             val gesture = when (val gestureName = response.gesture) {
                 "BigSmile" -> Gestures.BigSmile(strength = strength, duration = duration)
