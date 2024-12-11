@@ -56,8 +56,8 @@ fun GazeAversion(duration: Double = 1.0) = defineGesture("GazeAversion") {
     reset(dur)
 }
 
-val MyExpressHappy = defineGesture("MyExpressHappy") {
-        frame(0.3, 3.0) {
+fun MyExpressHappy() = defineGesture("MyExpressHappy") {
+    frame(0.3, 3.0) {
             BasicParams.SMILE_OPEN to 0.8
             ARKitParams.BROW_OUTER_UP_LEFT to 1
             ARKitParams.BROW_OUTER_UP_RIGHT to 1
@@ -65,10 +65,9 @@ val MyExpressHappy = defineGesture("MyExpressHappy") {
 
         }
         reset(3.0)
-
     }
 
-val MyExpressSad = defineGesture("MyExpressSad") {
+fun MyExpressSad() = defineGesture("MyExpressSad") {
     frame(0.3, 3.0) {
         BasicParams.EXPR_SAD to 0.3
         ARKitParams.EYE_SQUINT_LEFT to 0.2
@@ -80,7 +79,7 @@ val MyExpressSad = defineGesture("MyExpressSad") {
     reset(3.0)
 }
 
-val MyExpressSurprise = defineGesture("MyExpressSurprise") {
+fun MyExpressSurprise() = defineGesture("MyExpressSurprise") {
     frame(0.3, 3.0) {
         BasicParams.SURPRISE to 0.3
         //BasicParams.PHONE_OH to 0.3
@@ -93,7 +92,7 @@ val MyExpressSurprise = defineGesture("MyExpressSurprise") {
     reset(3.0)
 }
 
-val MyExpressDisapproval = defineGesture("MyExpressDisapproval") {
+fun MyExpressDisapproval() = defineGesture("MyExpressDisapproval") {
     frame(0.3, 2.0) {
         ARKitParams.BROW_DOWN_LEFT to 0.2
         ARKitParams.BROW_DOWN_RIGHT to 0.2
@@ -110,7 +109,7 @@ val MyExpressDisapproval = defineGesture("MyExpressDisapproval") {
     reset(2.7)
 }
 
-val MyExpressFear = defineGesture("MyExpressFear") {
+fun MyExpressFear() = defineGesture("MyExpressFear") {
     frame(0.3, 2.0) {
         BasicParams.EXPR_FEAR to 0.8
         BasicParams.BROW_UP_LEFT to 0.8
@@ -123,7 +122,7 @@ val MyExpressFear = defineGesture("MyExpressFear") {
     reset(2.5)
 }
 
-val MyExpressAnger = defineGesture("MyExpressAnger") {
+fun MyExpressAnger() = defineGesture("MyExpressAnger") {
     frame(0.3, 2.0) {
         BasicParams.EXPR_ANGER to 0.5
         BasicParams.BROW_IN_LEFT to 0.7
@@ -138,7 +137,7 @@ val MyExpressAnger = defineGesture("MyExpressAnger") {
     reset(2.5)
 }
 
-val MyExpressDisgust = defineGesture("MyExpressDisgust") {
+fun MyExpressDisgust() = defineGesture("MyExpressDisgust") {
     frame(0.3, 1.5) {
         BasicParams.EXPR_DISGUST to 0.7
         BasicParams.BROW_IN_LEFT to 0.5
@@ -151,7 +150,7 @@ val MyExpressDisgust = defineGesture("MyExpressDisgust") {
     reset(2.0)
 }
 
-val MyExpressRelief = defineGesture("MyExpressRelief") {
+fun MyExpressRelief() = defineGesture("MyExpressRelief") {
     frame(0.3, 1.0) {
         BasicParams.SMILE_CLOSED to 1
         BasicParams.LOOK_UP_LEFT to 0.8
