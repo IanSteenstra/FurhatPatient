@@ -22,7 +22,7 @@ val persona_1 = Persona( // TODO: Chang the persona here
 )
 
 val currentPersona: Persona = persona_1 // TODO: Set the persona here
-val conditionType: String = "control" // TODO: Set the condition here
+val conditionType: String = "intervention" // TODO: Set the condition here
 
 class Persona(
     val name: String,
@@ -126,7 +126,7 @@ class Persona(
 
 ) {
     /** The prompt for the openAI language model **/
-    private var systemPrompt: String = controlPrompt // TODO: Set the condition prompt here
+    private var systemPrompt: String = interventionPrompt // TODO: Set the condition prompt here
 
     val chatbot = OpenAIChatbot(systemPrompt = systemPrompt)
 }
