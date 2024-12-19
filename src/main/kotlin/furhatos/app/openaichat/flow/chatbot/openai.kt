@@ -18,7 +18,7 @@ val serviceKey = getenv("OPENAI_API_KEY") ?: throw IllegalStateException("API Ke
 
 val openAI = SimpleOpenAI.builder()
     .apiKey(serviceKey)
-    .build();
+    .build()
 
 data class PADScores(val arousal: Double = 0.0, val pleasure: Double = 0.0, val dominance: Double = 0.0)
 data class Beliefs(val belief1: String = "", val belief2: String = "", val belief3: String = "")
@@ -77,16 +77,36 @@ val jsonSchema: ResponseFormat = ResponseFormat.jsonSchema(
                 putObject("properties").also { properties -> // Define all properties within this block
                     // Simple properties
                     properties.putObject("attention").put("type", "string")
-                    properties.putObject("coping_approach").put("type", "string")
-                    properties.putObject("coping_potential").put("type", "number")
-                    properties.putObject("next_patient_utterance").put("type", "string")
-                    properties.putObject("coping_approach_reasoning").put("type", "string")
-                    properties.putObject("coping_potential_reasoning").put("type", "string")
-                    properties.putObject("next_patient_utterance_reasoning").put("type", "string")
-                    properties.putObject("gesture").put("type", "string")
-//                    properties.putObject("gesture_list").put("type", "array").apply {
-//                        putObject("items").put("type", "string")
-//                    }
+
+                    properties.putObject("appraisal_variables").put("type", "object").apply {
+                        put("additionalProperties", false)
+                        putObject("properties").also { appraisalVariablesProps ->
+                            appraisalVariablesProps.putObject("relevance").put("type", "number")
+                            appraisalVariablesProps.putObject("likelihood").put("type", "number")
+                            appraisalVariablesProps.putObject("desirability").put("type", "number")
+                            appraisalVariablesProps.putObject("changeability").put("type", "number")
+                            appraisalVariablesProps.putObject("controllability").put("type", "number")
+                            appraisalVariablesProps.putObject("relevance_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("likelihood_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("desirability_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("changeability_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("controllability_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("causal_attribution_reasoning").put("type", "string")
+                        }
+                        putArray("required").apply {
+                            add("relevance")
+                            add("likelihood")
+                            add("desirability")
+                            add("changeability")
+                            add("controllability")
+                            add("relevance_reasoning")
+                            add("likelihood_reasoning")
+                            add("desirability_reasoning")
+                            add("changeability_reasoning")
+                            add("controllability_reasoning")
+                            add("causal_attribution_reasoning")
+                        }
+                    }
 
                     // Nested Objects (with required fields and additionalProperties)
                     properties.putObject("pad_scores").put("type", "object").apply {
@@ -102,6 +122,33 @@ val jsonSchema: ResponseFormat = ResponseFormat.jsonSchema(
                             add("dominance")
                         }
                     }
+
+
+                    properties.putObject("emotions_top").put("type", "object").apply {
+                        put("additionalProperties", false)
+                        putObject("properties").also { emotionsTopProps ->
+                            emotionsTopProps.putObject("emotion1").put("type", "string")
+                            emotionsTopProps.putObject("emotion1_intensity").put("type", "number")
+                            emotionsTopProps.putObject("emotion2").put("type", "string")
+                            emotionsTopProps.putObject("emotion2_intensity").put("type", "number")
+                            emotionsTopProps.putObject("emotion3").put("type", "string")
+                            emotionsTopProps.putObject("emotion3_intensity").put("type", "number")
+                        }
+                        putArray("required").apply {
+                            add("emotion1")
+                            add("emotion2")
+                            add("emotion3")
+                            add("emotion1_intensity")
+                            add("emotion2_intensity")
+                            add("emotion3_intensity")
+                        }
+                    }
+
+                    properties.putObject("coping_potential_reasoning").put("type", "string")
+                    properties.putObject("coping_potential").put("type", "number")
+
+                    properties.putObject("coping_approach_reasoning").put("type", "string")
+                    properties.putObject("coping_approach").put("type", "string")
 
                     properties.putObject("updated_bdi").put("type", "object").apply {
                         put("additionalProperties", false)
@@ -154,55 +201,11 @@ val jsonSchema: ResponseFormat = ResponseFormat.jsonSchema(
                         }
                     }
 
-                    properties.putObject("emotions_top").put("type", "object").apply {
-                        put("additionalProperties", false)
-                        putObject("properties").also { emotionsTopProps ->
-                            emotionsTopProps.putObject("emotion1").put("type", "string")
-                            emotionsTopProps.putObject("emotion1_intensity").put("type", "number")
-                            emotionsTopProps.putObject("emotion2").put("type", "string")
-                            emotionsTopProps.putObject("emotion2_intensity").put("type", "number")
-                            emotionsTopProps.putObject("emotion3").put("type", "string")
-                            emotionsTopProps.putObject("emotion3_intensity").put("type", "number")
-                        }
-                        putArray("required").apply {
-                            add("emotion1")
-                            add("emotion2")
-                            add("emotion3")
-                            add("emotion1_intensity")
-                            add("emotion2_intensity")
-                            add("emotion3_intensity")
-                        }
-                    }
 
-                    properties.putObject("appraisal_variables").put("type", "object").apply {
-                        put("additionalProperties", false)
-                        putObject("properties").also { appraisalVariablesProps ->
-                            appraisalVariablesProps.putObject("relevance").put("type", "number")
-                            appraisalVariablesProps.putObject("likelihood").put("type", "number")
-                            appraisalVariablesProps.putObject("desirability").put("type", "number")
-                            appraisalVariablesProps.putObject("changeability").put("type", "number")
-                            appraisalVariablesProps.putObject("controllability").put("type", "number")
-                            appraisalVariablesProps.putObject("relevance_reasoning").put("type", "string")
-                            appraisalVariablesProps.putObject("likelihood_reasoning").put("type", "string")
-                            appraisalVariablesProps.putObject("desirability_reasoning").put("type", "string")
-                            appraisalVariablesProps.putObject("changeability_reasoning").put("type", "string")
-                            appraisalVariablesProps.putObject("controllability_reasoning").put("type", "string")
-                            appraisalVariablesProps.putObject("causal_attribution_reasoning").put("type", "string")
-                        }
-                        putArray("required").apply {
-                            add("relevance")
-                            add("likelihood")
-                            add("desirability")
-                            add("changeability")
-                            add("controllability")
-                            add("relevance_reasoning")
-                            add("likelihood_reasoning")
-                            add("desirability_reasoning")
-                            add("changeability_reasoning")
-                            add("controllability_reasoning")
-                            add("causal_attribution_reasoning")
-                        }
-                    }
+                    properties.putObject("next_patient_utterance_reasoning").put("type", "string")
+                    properties.putObject("next_patient_utterance").put("type", "string")
+
+                    properties.putObject("gesture").put("type", "string")
 
                     putArray("required").apply {
                         add("attention")
@@ -248,7 +251,7 @@ class OpenAIChatbot(val systemPrompt: String) {
                 }
 
                 is DialogHistory.UtteranceItem -> {
-                    println(it.parts[0].toString())
+//                    println(it.parts[0].toString()) // testing
                     chatRequestBuilder.message(ChatMessage.AssistantMessage.of(it.parts[0].toString()))
                 }
             }
@@ -258,7 +261,7 @@ class OpenAIChatbot(val systemPrompt: String) {
         val chatResponse = futureChat.join()
         val jsonResponse = chatResponse.firstContent().toString()
 
-        println(jsonResponse)
+//        println(jsonResponse) // testing
 
         // Deserialize the JSON string into AppraisalSchema object
         if (conditionType == "intervention") {

@@ -67,6 +67,9 @@ val MainChat = state(Parent) {
                 }
             }
 
+            currentPersona.currentBeliefs = response.updated_bdi.toString()
+            print(currentPersona.currentBeliefs)
+
             gesture?.let { furhat.gesture(it) }
             furhat.say(response.next_patient_utterance)
         } else { // Idle/Control
