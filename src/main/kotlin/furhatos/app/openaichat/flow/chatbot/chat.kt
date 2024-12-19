@@ -39,7 +39,7 @@ val MainChat = state(Parent) {
             val strength = 5.0
             val duration = 2.0
 
-            print(response.gesture)
+//            print(response.gesture) // testing
 
             val gesture = when (val gestureName = response.gesture) {
                 "BigSmile" -> Gestures.BigSmile(strength = strength, duration = duration)
@@ -68,7 +68,7 @@ val MainChat = state(Parent) {
             }
 
             currentPersona.currentBeliefs = response.updated_bdi.toString()
-            print(currentPersona.currentBeliefs)
+//            print(currentPersona.currentBeliefs) // testing
 
             gesture?.let { furhat.gesture(it) }
             furhat.say(response.next_patient_utterance)
