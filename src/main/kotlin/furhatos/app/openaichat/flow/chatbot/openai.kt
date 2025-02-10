@@ -1,6 +1,8 @@
 package furhatos.app.openaichat.flow.chatbot
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
@@ -20,29 +22,32 @@ val openAI = SimpleOpenAI.builder()
     .apiKey(serviceKey)
     .build();
 
-data class PADScores(val pleasure: Double = 0.0, val arousal: Double = 0.0, val dominance: Double = 0.0)
-data class Beliefs(val belief1: String = "", val belief2: String = "", val belief3: String = "")
+data class PADScores(var pleasure: Double = 0.0, var arousal: Double = 0.0, var dominance: Double = 0.0)
+data class Beliefs(var belief1: String = "", var belief2: String = "", var belief3: String = "")
 data class Desires(val desire1: String = "", val desire2: String = "", val desire3: String = "")
 data class Intentions(val intention1: String = "", val intention2: String = "", val intention3: String = "")
-data class EmotionsTop(val emotion1: String = "", val emotion1Intensity: Double = 0.0, val emotion2: String = "", val emotion2Intensity: Double = 0.0, val emotion3: String = "", val emotion3Intensity: Double = 0.0)
+data class EmotionsTop(val emotion1: String = "", val emotion1_intensity: Double = 0.0, val emotion2: String = "", val emotion2_intensity: Double = 0.0, val emotion3: String = "", val emotion3_intensity: Double = 0.0)
 data class AppraisalVariables(
-    val relevance: Double = 0.0,
-    val likelihood: Double = 0.0,
-    val desirability: Double = 0.0,
-    val changeability: Double = 0.0,
-    val controllability: Double = 0.0,
     val relevance_reasoning: String = "",
-    val likelihood_reasoning: String = "",
+    val relevance: Double = 0.0,
     val desirability_reasoning: String = "",
-    val changeability_reasoning: String = "",
+    val desirability: Double = 0.0,
+    val expectedness_reasoning: String = "",
+    val expectedness: Double = 0.0,
+    val likelihood_reasoning: String = "",
+    val likelihood: Double = 0.0,
     val controllability_reasoning: String = "",
-    val causal_attribution_reasoning: String = ""
+    val controllability: Double = 0.0,
+    val changeability_reasoning: String = "",
+    val changeability: Double = 0.0,
+    val causal_attribution_reasoning: String = "",
+    val causal_attribution: Double = 0.0
 )
 
 data class UpdatedBDI(
-    val Beliefs: Beliefs = Beliefs(),
-    val Desires: Desires = Desires(),
-    val Intentions: Intentions = Intentions()
+    val beliefs: Beliefs = Beliefs(),
+    val desires: Desires = Desires(),
+    val intentions: Intentions = Intentions()
 )
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -59,7 +64,8 @@ data class AppraisalSchema(
     val updated_bdi: UpdatedBDI = UpdatedBDI(),
     val next_patient_utterance_reasoning: String = "",
     val next_patient_utterance: String = "",
-    val next_patient_facial_expression: String = ""
+    val next_patient_facial_expression: String = "",
+    val gesture: String = ""
 )
 
 val objectMapper = ObjectMapper()
@@ -82,30 +88,36 @@ val jsonSchema: ResponseFormat = ResponseFormat.jsonSchema(
                     properties.putObject("appraisal_variables").put("type", "object").apply {
                         put("additionalProperties", false)
                         putObject("properties").also { appraisalVariablesProps ->
-                            appraisalVariablesProps.putObject("relevance").put("type", "number")
-                            appraisalVariablesProps.putObject("likelihood").put("type", "number")
-                            appraisalVariablesProps.putObject("desirability").put("type", "number")
-                            appraisalVariablesProps.putObject("changeability").put("type", "number")
-                            appraisalVariablesProps.putObject("controllability").put("type", "number")
                             appraisalVariablesProps.putObject("relevance_reasoning").put("type", "string")
-                            appraisalVariablesProps.putObject("likelihood_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("relevance").put("type", "number")
                             appraisalVariablesProps.putObject("desirability_reasoning").put("type", "string")
-                            appraisalVariablesProps.putObject("changeability_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("desirability").put("type", "number")
+                            appraisalVariablesProps.putObject("expectedness_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("expectedness").put("type", "number")
+                            appraisalVariablesProps.putObject("likelihood_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("likelihood").put("type", "number")
                             appraisalVariablesProps.putObject("controllability_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("controllability").put("type", "number")
+                            appraisalVariablesProps.putObject("changeability_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("changeability").put("type", "number")
                             appraisalVariablesProps.putObject("causal_attribution_reasoning").put("type", "string")
+                            appraisalVariablesProps.putObject("causal_attribution").put("type", "number")
                         }
                         putArray("required").apply {
-                            add("relevance")
-                            add("likelihood")
-                            add("desirability")
-                            add("changeability")
-                            add("controllability")
                             add("relevance_reasoning")
-                            add("likelihood_reasoning")
+                            add("relevance")
                             add("desirability_reasoning")
-                            add("changeability_reasoning")
+                            add("desirability")
+                            add("expectedness_reasoning")
+                            add("expectedness")
+                            add("likelihood_reasoning")
+                            add("likelihood")
                             add("controllability_reasoning")
+                            add("controllability")
+                            add("changeability_reasoning")
+                            add("changeability")
                             add("causal_attribution_reasoning")
+                            add("causal_attribution")
                         }
                     }
 
@@ -127,19 +139,19 @@ val jsonSchema: ResponseFormat = ResponseFormat.jsonSchema(
                         put("additionalProperties", false)
                         putObject("properties").also { emotionsTopProps ->
                             emotionsTopProps.putObject("emotion1").put("type", "string")
-                            emotionsTopProps.putObject("emotion1Intensity").put("type", "number")
+                            emotionsTopProps.putObject("emotion1_intensity").put("type", "number")
                             emotionsTopProps.putObject("emotion2").put("type", "string")
-                            emotionsTopProps.putObject("emotion2Intensity").put("type", "number")
+                            emotionsTopProps.putObject("emotion2_intensity").put("type", "number")
                             emotionsTopProps.putObject("emotion3").put("type", "string")
-                            emotionsTopProps.putObject("emotion3Intensity").put("type", "number")
+                            emotionsTopProps.putObject("emotion3_intensity").put("type", "number")
                         }
                         putArray("required").apply {
                             add("emotion1")
-                            add("emotion1Intensity")
+                            add("emotion1_intensity")
                             add("emotion2")
-                            add("emotion2Intensity")
+                            add("emotion2_intensity")
                             add("emotion3")
-                            add("emotion3Intensity")
+                            add("emotion3_intensity")
                         }
                     }
 
@@ -151,7 +163,7 @@ val jsonSchema: ResponseFormat = ResponseFormat.jsonSchema(
                     properties.putObject("updated_bdi").put("type", "object").apply {
                         put("additionalProperties", false)
                         putObject("properties").also { updatedBdiProps ->
-                            updatedBdiProps.putObject("Beliefs").put("type", "object").apply {
+                            updatedBdiProps.putObject("beliefs").put("type", "object").apply {
                                 put("additionalProperties", false)
                                 putObject("properties").also { beliefsProps ->
                                     beliefsProps.putObject("belief1").put("type", "string")
@@ -165,7 +177,7 @@ val jsonSchema: ResponseFormat = ResponseFormat.jsonSchema(
                                 }
                             }
 
-                            updatedBdiProps.putObject("Desires").put("type", "object").apply {
+                            updatedBdiProps.putObject("desires").put("type", "object").apply {
                                 put("additionalProperties", false)
                                 putObject("properties").also { desiresProps ->
                                     desiresProps.putObject("desire1").put("type", "string")
@@ -179,7 +191,7 @@ val jsonSchema: ResponseFormat = ResponseFormat.jsonSchema(
                                 }
                             }
 
-                            updatedBdiProps.putObject("Intentions").put("type", "object").apply {
+                            updatedBdiProps.putObject("intentions").put("type", "object").apply {
                                 put("additionalProperties", false)
                                 putObject("properties").also { intentionsProps ->
                                     intentionsProps.putObject("intention1").put("type", "string")
@@ -194,9 +206,9 @@ val jsonSchema: ResponseFormat = ResponseFormat.jsonSchema(
                             }
                         }
                         putArray("required").apply {
-                            add("Beliefs")
-                            add("Desires")
-                            add("Intentions")
+                            add("beliefs")
+                            add("desires")
+                            add("intentions")
                         }
                     }
 
@@ -238,7 +250,6 @@ class OpenAIChatbot() {
         if (conditionType == "intervention") {
             chatRequestBuilder.responseFormat(jsonSchema)
         }
-
         Furhat.dialogHistory.all.takeLast(10).forEach {
             when (it) {
                 is DialogHistory.ResponseItem -> {
@@ -246,7 +257,7 @@ class OpenAIChatbot() {
                 }
 
                 is DialogHistory.UtteranceItem -> {
-                    chatRequestBuilder.message(ChatMessage.AssistantMessage.of(it.toUtterance().parts[0].toString()))
+                    chatRequestBuilder.message(ChatMessage.AssistantMessage.of(it.toText()))
                 }
             }
         }
@@ -259,6 +270,7 @@ class OpenAIChatbot() {
 
         // Deserialize the JSON string into AppraisalSchema object
         if (conditionType == "intervention") {
+            println(objectMapper.readValue(jsonResponse, AppraisalSchema::class.java))
             return objectMapper.readValue(jsonResponse, AppraisalSchema::class.java)
         } else {
             return jsonResponse

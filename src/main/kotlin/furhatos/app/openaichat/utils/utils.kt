@@ -6,7 +6,6 @@ import furhatos.gestures.BasicParams
 import furhatos.gestures.defineGesture
 import kotlin.random.Random
 
-// list of all Furhat parameters https://docs.furhat.io/facecore/
 
 fun FlowControlRunner.askForAnything(text: String) {
 
@@ -56,18 +55,20 @@ fun GazeAversion(duration: Double = 1.0) = defineGesture("GazeAversion") {
     reset(dur)
 }
 
-fun MyExpressHappy() = defineGesture("MyExpressHappy") {
+
+val MyExpressHappy = defineGesture("MyExpressHappy") {
     frame(0.3, 3.0) {
-            BasicParams.SMILE_OPEN to 0.8
-            ARKitParams.BROW_OUTER_UP_LEFT to 1
-            ARKitParams.BROW_OUTER_UP_RIGHT to 1
-            ARKitParams.CHEEK_PUFF to 0.8
+        BasicParams.SMILE_OPEN to 0.8
+        ARKitParams.BROW_OUTER_UP_LEFT to 1
+        ARKitParams.BROW_OUTER_UP_RIGHT to 1
+        ARKitParams.CHEEK_PUFF to 0.8
 
-        }
-        reset(3.0)
     }
+    reset(3.0)
 
-fun MyExpressSad() = defineGesture("MyExpressSad") {
+}
+
+val MyExpressSad = defineGesture("MyExpressSad") {
     frame(0.3, 3.0) {
         BasicParams.EXPR_SAD to 0.3
         ARKitParams.EYE_SQUINT_LEFT to 0.2
@@ -79,7 +80,7 @@ fun MyExpressSad() = defineGesture("MyExpressSad") {
     reset(3.0)
 }
 
-fun MyExpressSurprise() = defineGesture("MyExpressSurprise") {
+val MyExpressSurprise = defineGesture("MyExpressSurprise") {
     frame(0.3, 3.0) {
         BasicParams.SURPRISE to 0.3
         //BasicParams.PHONE_OH to 0.3
@@ -92,7 +93,7 @@ fun MyExpressSurprise() = defineGesture("MyExpressSurprise") {
     reset(3.0)
 }
 
-fun MyExpressDisapproval() = defineGesture("MyExpressDisapproval") {
+val MyExpressDisapproval = defineGesture("MyExpressDisapproval") {
     frame(0.3, 2.0) {
         ARKitParams.BROW_DOWN_LEFT to 0.2
         ARKitParams.BROW_DOWN_RIGHT to 0.2
@@ -109,7 +110,7 @@ fun MyExpressDisapproval() = defineGesture("MyExpressDisapproval") {
     reset(2.7)
 }
 
-fun MyExpressFear() = defineGesture("MyExpressFear") {
+val MyExpressFear = defineGesture("MyExpressFear") {
     frame(0.3, 2.0) {
         BasicParams.EXPR_FEAR to 0.8
         BasicParams.BROW_UP_LEFT to 0.8
@@ -122,7 +123,7 @@ fun MyExpressFear() = defineGesture("MyExpressFear") {
     reset(2.5)
 }
 
-fun MyExpressAnger() = defineGesture("MyExpressAnger") {
+val MyExpressAnger = defineGesture("MyExpressAnger") {
     frame(0.3, 2.0) {
         BasicParams.EXPR_ANGER to 0.5
         BasicParams.BROW_IN_LEFT to 0.7
@@ -137,7 +138,7 @@ fun MyExpressAnger() = defineGesture("MyExpressAnger") {
     reset(2.5)
 }
 
-fun MyExpressDisgust() = defineGesture("MyExpressDisgust") {
+val MyExpressDisgust = defineGesture("MyExpressDisgust") {
     frame(0.3, 1.5) {
         BasicParams.EXPR_DISGUST to 0.7
         BasicParams.BROW_IN_LEFT to 0.5
@@ -150,7 +151,7 @@ fun MyExpressDisgust() = defineGesture("MyExpressDisgust") {
     reset(2.0)
 }
 
-fun MyExpressRelief() = defineGesture("MyExpressRelief") {
+val MyExpressRelief = defineGesture("MyExpressRelief") {
     frame(0.3, 1.0) {
         BasicParams.SMILE_CLOSED to 1
         BasicParams.LOOK_UP_LEFT to 0.8

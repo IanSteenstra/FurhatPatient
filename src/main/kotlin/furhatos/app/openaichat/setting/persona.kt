@@ -1,5 +1,6 @@
 package furhatos.app.openaichat.setting
 
+import furhatos.app.openaichat.flow.chatbot.Current_BDI
 import furhatos.app.openaichat.flow.chatbot.OpenAIChatbot
 import furhatos.flow.kotlin.FlowControlRunner
 import furhatos.flow.kotlin.furhat
@@ -153,11 +154,11 @@ class Persona(
             "        \"Wink\"\n" +
             "]\n" +
             ">>>\n***" +
-            "PATIENT'S CURRENT BELIEFS, DESIRES AND INTENTIONS:\n***\n"
+            "PATIENT'S CURRENT BELIEFS, DESIRES AND INTENTIONS:\n$Current_BDI***\n"
 
 
 ) {
-    val systemPrompt: String
+    var systemPrompt: String = ""
 
     init {
         systemPrompt = if (conditionType == "intervention") {
@@ -165,8 +166,28 @@ class Persona(
         } else if (conditionType == "control") {
             controlPrompt
         }
-        else{
-            ""// default (or test)
+        else{ // default (or test)
+            "depending on what the user is asking, choose and output one of the following facial expressions that is closest to what the user asked for." +
+                    "\"<<< facial_expression_list = [\\n\" +\n" +
+                    "            \"        \\\"ExpressAnger\\\",\\n\" +\n" +
+                    "            \"        \\\"ExpressDisgust\\\",\\n\" +\n" +
+                    "            \"        \\\"ExpressDisapproval\\\",\\n\" +\n" +
+                    "            \"        \\\"ExpressFear\\\",\\n\" +\n" +
+                    "            \"        \\\"ExpressSad\\\",\\n\" +\n" +
+                    "            \"        \\\"ExpressHappy\\\",\\n\" +\n" +
+                    "            \"        \\\"ExpressSurprise\\\",\\n\" +\n" +
+                    "            \"        \\\"ExpressRelief\\\",\\n\" +\n" +
+                    "            \"        \\\"Blink\\\",\\n\" +\n" +
+                    "            \"        \\\"CloseEyes\\\",\\n\" +\n" +
+                    "            \"        \\\"GazeAway\\\",\\n\" +\n" +
+                    "            \"        \\\"Nod\\\",\\n\" +\n" +
+                    "            \"        \\\"OpenEyes\\\",\\n\" +\n" +
+                    "            \"        \\\"ShakeHead\\\",\\n\" +\n" +
+                    "            \"        \\\"SmallSmile\\\",\\n\" +\n" +
+                    "            \"        \\\"Thoughtful\\\",\\n\" +\n" +
+                    "            \"        \\\"Wink\\\"\\n\" +\n" +
+                    "            \"]\\n\" +\n" +
+                    "            \">>> "
         }
 
     }
